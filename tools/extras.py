@@ -1,9 +1,10 @@
 import kmenu
 def apply(get,img,errors):
     t=get('DAT/TIT_DT.BIN'); kmenu.build(t)
-    import kmsg; kmsg.apply(t,'TIT'); kmsg.apply(get('DAT/MGAME_DT.BIN'),'MGAME')
+    import kmsg; kmsg.apply(t,'TIT'); kmsg.apply(get('DAT/MGAME_DT.BIN'),'MGAME'); import kmgui; kmgui.apply(get('DAT/MGAME_DT.BIN'))
     sy=get('DAT/SYS.BIN')  # in-game option menu: same sprites as TIT_DT at -0xa83c
     for o in (0xe460,0xe700,0xe9a0,0xdc80,0xdf20,0xe1c0): sy[o-0xa83c:o-0xa83c+0x280]=t[o:o+0x280]
+    import ktitle; ktitle.apply(get)
     import kslot,kload,json
     kslot.apply(get('DAT/SLOT_DT.BIN'))
     import kslotmsg,kslotui; kslotmsg.apply(get('DAT/SLOT_DT.BIN')); kslotui.apply(get('DAT/SLOT_DT.BIN'))

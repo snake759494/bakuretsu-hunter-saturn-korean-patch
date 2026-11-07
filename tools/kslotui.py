@@ -54,24 +54,25 @@ def cloud(t,p,text):
     m=mask(text,36,13,11,font='NanumSquareNeo-dEb.ttf')
     sub=a[10:23,6:42];sub[m]=5
     p4(t,p,a)
-def cards(t,p,fill,outl,shad,KJ):
+def cards(t,p,fill,outl,shad,KJ,chars):
     a=g8(t,p,120,24)
-    for k,ch in enumerate('필전회슬'):
-        x0=30*k+5;x1=30*k+23
-        for y in range(3,21):
+    for k,ch in enumerate(chars):
+        x0=30*k+6;x1=30*k+23
+        for y in range(4,21):
             row=a[y,x0:x1];bg=[v for v in row if v not in KJ]
             f=np.unique(bg,return_counts=True);f=f[0][f[1].argmax()] if len(bg) else a[y,x0-1]
             for x in range(x0,x1):
                 if a[y,x] in KJ: a[y,x]=f
-        m=mask(ch,18,18,14,font='NanumSquareNeo-cBd.ttf')
+        m=mask(ch,16,16,14,font='NanumSquareNeo-cBd.ttf')
         o=dil(m)&~m; sh=np.roll(np.roll(m,1,0),1,1)&~m&~o
-        sub=a[3:21,x0:x1];sub[sh]=shad;sub[o]=outl;sub[m]=fill
+        sub=a[4:20,x0:x0+16];sub[sh]=shad;sub[o]=outl;sub[m]=fill
     p8(t,p,a)
 def apply(t):
-    cards(t,0x25f20,0x31,0x11,0x14,{0x31,0x30,0x11,0x14})
-    cards(t,0x26c60,0x21,0x22,0x24,{0x21,0x22,0x24})
+    cards(t,0x25f20,0x31,0x11,0x14,{0x31,0x30,0x11,0x14},'필전회속')
+    cards(t,0x26c60,0x21,0x22,0x24,{0x21,0x22,0x24},'필전회지')
     button(t,0x2ae60,'배틀'); button(t,0x2b360,'카드')
-    panel(t,0x28aa0)
+    panel(t,0x28aa0); player(t)
+    hp_labels(t)
     cloud(t,0x46080,'하아'); cloud(t,0x463a0,'하암~')
 if __name__=='__main__':
     W=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -83,3 +84,43 @@ if __name__=='__main__':
     c=np.zeros((32,48*4+12),np.uint8);x=0
     for a in ims: c[:a.shape[0],x:x+48]=a;x+=52
     Image.fromarray(c).resize((c.shape[1]*5,160),0).save(os.path.join(W,'shots/ui_btn.png'))
+
+# ---- HP panels (40x40 8bpp, left/right halves): 力技 / 防必 labels -> 힘기 / 방필
+HP_PANELS=[(0x359a0,'힘기'),(0x361e0,'방필'),(0x36a20,'힘기'),(0x37260,'방필'),
+           (0x37aa0,'힘기'),(0x382e0,'방필'),(0x38b20,'힘기'),(0x39360,'방필')]
+TXT8={0x10,0x30,0x31,0x23,0x13,0x15}
+def hp_labels(t):
+    import sys;sys.path.insert(0,os.path.dirname(__file__))
+    from kname import F9
+    def glyph(ch):
+        dw,(w,h,ox,oy),rows,bits=F9[ord(ch)]
+        m=np.zeros((12,12),bool)
+        for r,v in enumerate(rows):
+            for b in range(w):
+                if v>>(bits-1-b)&1: m[r+1+(9-h)//2+0, 1+b+ox]=True
+        return m
+    for p,lab in HP_PANELS:
+        a=g8(t,p,40,40)
+        for (y0,y1),ch in zip(((17,27),(29,39)),lab):
+            for y in range(y0,y1):
+                bg=[v for v in a[y,13:40] if v not in TXT8]
+                f=np.unique(bg,return_counts=True);f=f[0][f[1].argmax()]
+                for x in range(0,13):
+                    if a[y,x] in TXT8: a[y,x]=f
+            m=glyph(ch)[0:10,0:12]
+            o=dil(m)&~m; sh=np.roll(np.roll(m,1,0),1,1)&~m&~o
+            sub=a[y0:y1,0:12];sub[o]=0x30;sub[sh]=0x10;sub[m]=0x31
+        p8(t,p,a)
+
+def player(t,p=0x28aa0):
+    a=g8(t,p,120,72)
+    TX={0x15,0x30,0x31,0x2d,0x19,0x23}
+    for y in range(4,22):
+        bg=[v for v in list(a[y,58:66])+list(a[y,116:120]) if v not in TX]
+        f=np.unique(bg,return_counts=True);f=f[0][f[1].argmax()] if len(bg) else 0x1c
+        for x in range(64,117):
+            if a[y,x] in TX: a[y,x]=f
+    m=mask('플레이어',53,18,12,sp=0)
+    o=dil(m)&~m
+    sub=a[3:21,63:116];sub[o]=0x15;sub[m]=0x31
+    p8(t,p,a)

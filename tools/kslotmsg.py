@@ -2,7 +2,7 @@
 import struct,os,numpy as np
 from PIL import Image,ImageDraw,ImageFont
 W=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FB=0x46f40; MSG0=0x466a0; MSGEND=0x46e92; NG=186
+FB=0x46f3c; MSG0=0x466a0; MSGEND=0x46e92; NG=186
 PTRS=list(range(0x46ea4,0x46f3c,4))      # 38 message pointers (LWRAM 0x200000-based)
 FONT=os.path.join(os.path.dirname(W),'NanumSquareNeo-cBd.ttf')
 def cell(ch):

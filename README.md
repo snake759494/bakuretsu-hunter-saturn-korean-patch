@@ -1,10 +1,10 @@
 # 폭렬헌터 세가 새턴 한글패치
 
-세가 새턴 일본판 **爆れつハンター (T-22402G)**용 비공식 한국어 패치입니다. **1~6장 44장면의 대사·나레이션·선택지 1,621개 전체**를 한국어로 바꿨습니다. **대화창 이름표, 타이틀·옵션·파일 메뉴 버튼, 세이브 파일 판, 세이브/로드 화면, 슬롯 배틀 승패 글자** 같은 그림 글자도 한글로 다시 그렸습니다. 현재 배포판은 **v1.2 (2026-11-07)**입니다.
+세가 새턴 일본판 **爆れつハンター (T-22402G)**용 비공식 한국어 패치입니다. **1~6장 44장면의 대사·나레이션·선택지 1,621개 전체**를 한국어로 바꿨습니다. **대화창 이름표, 타이틀·옵션·파일 메뉴 버튼, 세이브 파일 판, 세이브/로드 화면, 슬롯 배틀 승패 글자** 같은 그림 글자도 한글로 다시 그렸습니다. 현재 배포판은 **v1.3 (2026-11-08)**입니다.
 
 [패치 다운로드](https://github.com/snake759494/bakuretsu-hunter-saturn-korean-patch/releases/latest) · [기술 설명](docs/TECHNICAL.md) · [재빌드](docs/BUILD.md) · [변경 기록](CHANGELOG.md) · [권리 안내](RIGHTS.md)
 
-릴리즈 첨부 파일은 한글패치 **BakuretsuHunter_SS_KO_v1.2.xdelta**뿐입니다. 저장소에는 제작 소스와 한국어 번역만 공개합니다. 원본·완성 디스크 이미지, 추출한 게임 파일, 일본어 원문, 글꼴 파일, 외부 실행 파일은 포함하지 않습니다. GitHub가 자동으로 만드는 Source code ZIP/TAR는 저장소 소스를 압축한 것이며 게임 파일이 아닙니다.
+릴리즈 첨부 파일은 한글패치 **BakuretsuHunter_SS_KO_v1.3.xdelta**뿐입니다. 저장소에는 제작 소스와 한국어 번역만 공개합니다. 원본·완성 디스크 이미지, 추출한 게임 파일, 일본어 원문, 글꼴 파일, 외부 실행 파일은 포함하지 않습니다. GitHub가 자동으로 만드는 Source code ZIP/TAR는 저장소 소스를 압축한 것이며 게임 파일이 아닙니다.
 
 ## 게임 소개 및 대상 버전
 
@@ -43,7 +43,7 @@ Get-FileHash -Algorithm MD5 -LiteralPath '.\Bakuretsu Hunter (Japan) (Disc 1) (T
 
 ### xdelta UI 사용
 
-1. 릴리즈에서 `BakuretsuHunter_SS_KO_v1.2.xdelta`를 받습니다.
+1. 릴리즈에서 `BakuretsuHunter_SS_KO_v1.3.xdelta`를 받습니다.
 2. xdelta3 패치를 지원하는 도구에서 **Apply Patch** 기능을 엽니다.
 3. **Patch**에는 xdelta 파일을, **Source File**에는 해시가 일치하는 원본 **트랙 1** `.bin`을 선택합니다.
 4. **Output File**에는 새 파일 이름을 지정합니다(예: `Bakuretsu Hunter (Korean) (Track 1).bin`).
@@ -64,13 +64,13 @@ xdelta는 호환성을 위해 압축·2차 압축·파일 경로 헤더 없이 �
 ### 명령줄 사용
 
 ```powershell
-.\xdelta3.exe -d -s '.\Bakuretsu Hunter (Japan) (Disc 1) (Track 1).bin' '.\BakuretsuHunter_SS_KO_v1.2.xdelta' '.\Bakuretsu Hunter (Korean) (Track 1).bin'
+.\xdelta3.exe -d -s '.\Bakuretsu Hunter (Japan) (Disc 1) (Track 1).bin' '.\BakuretsuHunter_SS_KO_v1.3.xdelta' '.\Bakuretsu Hunter (Korean) (Track 1).bin'
 ```
 
 해시를 자동으로 검사하고 CUE까지 만들어 주는 도구도 있습니다(CUE는 원본 트랙 2를 그대로 가리킵니다). Python 3과 xdelta3가 필요하며, 같은 이름의 출력 파일이 이미 있으면 덮어쓰지 않습니다.
 
 ```powershell
-python tools/apply_release.py --xdelta '.\xdelta3.exe' --source '.\Bakuretsu Hunter (Japan) (Disc 1) (Track 1).bin' --patch '.\BakuretsuHunter_SS_KO_v1.2.xdelta' --output '.\Bakuretsu Hunter (Korean) (Track 1).bin'
+python tools/apply_release.py --xdelta '.\xdelta3.exe' --source '.\Bakuretsu Hunter (Japan) (Disc 1) (Track 1).bin' --patch '.\BakuretsuHunter_SS_KO_v1.3.xdelta' --output '.\Bakuretsu Hunter (Korean) (Track 1).bin'
 ```
 
 ### 실행
@@ -87,7 +87,8 @@ python tools/apply_release.py --xdelta '.\xdelta3.exe' --source '.\Bakuretsu Hun
 | 메뉴 그림 글자 | 타이틀 시작·옵션, 옵션 화면 스테레오·모노·음성·텍스트·사운드·메시지, 파일 화면 로드·복사·삭제·처음부터 |
 | 세이브 | 파일 판 「스테이지 ○장」, 세이브 화면 「세이브 중」 |
 | 로고 | 타이틀 로고와 세이브/로드 화면 로고는 그림을 살리고 작은 「폭렬헌터」 자막을 덧붙임(갈무리7) |
-| 슬롯 배틀 | 「승리」·「패배」 큰 글자 |
+| 슬롯 배틀 | 「승리」·「패배」 큰 글자, 튜토리얼 글꼴, 능력치 표시 힘·방·기·필, 「플레이어」 판 |
+| 장 제목 | 1~5장 시작의 빨간 제목 화면(후리가나는 뺐습니다) |
 
 ### 번역 원칙
 
@@ -102,7 +103,7 @@ python tools/apply_release.py --xdelta '.\xdelta3.exe' --source '.\Bakuretsu Hun
 
 ## 알려진 한계
 
-- 타이틀·옵션·파일 메뉴, 세이브/로드 화면과 여러 장면의 대사는 에뮬레이터로 확인했지만, **슬롯 배틀과 미니게임 화면은 테스트한 에뮬레이터에서 검은 화면으로만 나와** 「승리」·「패배」 글자가 실제로 어떻게 보이는지 확인하지 못했습니다. 이 화면들에 다른 글자 그림이 있는지도 확인하지 못했습니다.
+- 타이틀·옵션·파일 메뉴, 세이브/로드 화면과 여러 장면의 대사는 에뮬레이터로 확인했지만, 슬롯 배틀 튜토리얼·능력치 판과 1장 제목 화면은 에뮬레이터로 확인했습니다. 2~5장 제목 화면과 미니게임 화면은 이미지 변환 결과만 확인했습니다.
 - 모든 선택지 분기를 끝까지 플레이해 보지는 않았습니다. 빌드는 모든 대사가 칸에 들어가는지 검사합니다.
 - 실기에서의 동작은 확인하지 못했습니다. 칸을 넘치거나 어긋난 문구가 있으면 이슈로 알려 주세요.
 

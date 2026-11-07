@@ -50,7 +50,18 @@ def wood2(t,off,w,h,s,size,x0,x1,y0,y1,TX=(15,14,13,11)):
     if m.shape[1]>x1-x0-4: m=np.array(Image.fromarray(m.astype(np.uint8)*255).resize((x1-x0-4,m.shape[0]),Image.LANCZOS))>100
     F=place(m,w,h,x0,x1,y0,y1);O=dil(F)&~F;N[O&~np.isin(P,(12,13))]=N[O&~np.isin(P,(12,13))]
     N[F]=15;put(t,off,N)
+def mbtn(t,off,s):
+    # 48x16 movie-player buttons: keep icon (x<17), redraw label with Galmuri9
+    from kname import render,F9
+    P=get(t,off,48,16);P[1:15,17:47]=1
+    img,W=render(s,F9,12);x=17+(30-W)//2
+    for y in range(16):
+        for x2 in range(W):
+            if img[y,x2] and 0<x+x2<47 and 1<=y+1<15: P[y+1,x+x2]=15
+    put(t,off,P)
 def build(t):
+    button(t,0x51e0,'스페셜',12,1)
+    for off,s in ((0x19d80,'뒤로'),(0x19f20,'재생'),(0x1a0c0,'앞으로')): mbtn(t,off,s)
     for off,w,h,txt,sz in [(0xfc60,208,24,'슬롯 배틀 할래 할래',17),(0x10640,208,24,'도플 놀이 할래 할래',17),(0x11020,208,24,'무비 볼래 볼래',17),
                            (0x123e0,256,32,'슬롯 배틀! 누구랑 할래?',20),(0x146e0,256,32,'도플 놀이! 누구로 할래?',20),(0x162c0,256,32,'무비 볼래 볼래',22),
                            ]:
