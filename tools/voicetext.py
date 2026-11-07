@@ -60,13 +60,13 @@ def u32(m, a): return struct.unpack('>I', m[a - BASE:a - BASE + 4])[0]
 
 def patch(m):
     """m: bytearray of a MEN file (original layout). Returns True if patched."""
-    if u32(m, TEXT_LIT) != TEXT or u32(m, POOL_OLD + 32) != A1: return False
+    if any(u32(m, x) != TEXT for x in (TEXT_LIT, 0x0602d248, 0x0602d37c, 0x0602d400)) or u32(m, POOL_OLD + 32) != A1: return False
     K = [u32(m, POOL_OLD + 4 * i) for i in range(9)]
     k490bc, k53920, k48a4c, k49dcc, k43eb4, kvram, k427e0, kfb40, kd4d0 = K
     a = Asm(A0)
     # ---- voice_entry (0x0602d404, entry kept) ----
-    a.w(0x4F22)            # sts.l pr,@-r15
     a.w(0x2F86)            # mov.l r8,@-r15
+    a.w(0x4F22)            # sts.l pr,@-r15
     a.j(12, 0xB000, 'req'); a.w(0x6843)   # bsr req ; mov r4,r8
     a.w(0x2008)            # tst r0,r0
     a.j(8, 0x8900, 'skip') # bt skip
@@ -76,13 +76,11 @@ def patch(m):
     a.w(0x8521)            # mov.w @(2,r2),r0
     a.lit(1, k427e0)
     a.w(0x2008)            # tst r0,r0
-    a.j(8, 0x8B00, 'first')   # bf first
+    a.j(8, 0x8F00, 'draw') # bf/s draw   (@+2 != 0 -> first entry)
+    a.w(0x6412)            # mov.l @r1,r4  (delay slot: default = first entry)
     a.w(0x6021)            # mov.w @r2,r0
-    a.w(0x600D)            # extu.w r0,r0
     a.w(0x4008)            # shll2 r0
     a.w(0x041E)            # mov.l @(r0,r1),r4
-    a.j(12, 0xA000, 'draw'); a.w(0x0009)   # bra draw
-    a.L('first'); a.w(0x6412)  # mov.l @r1,r4
     a.L('draw')
     a.lit(5, kvram)
     a.w(0xE603); a.w(0xE700)   # mov #3,r6 ; mov #0,r7
@@ -95,8 +93,9 @@ def patch(m):
     a.lit(1, kd4d0)
     a.w(0x1813)            # mov.l r1,@(12,r8)
     a.w(0x410B); a.w(0x6483)   # jsr @r1 ; mov r8,r4
-    a.w(0x68F6)            # mov.l @r15+,r8
-    a.w(0x000B); a.w(0x4F26)   # rts ; lds.l @r15+,pr
+    # NB: never put lds pr in an rts delay slot (rts uses the old PR)
+    a.w(0x4F26)            # lds.l @r15+,pr
+    a.w(0x000B); a.w(0x68F6)   # rts ; mov.l @r15+,r8
     # ---- text_entry ----
     a.L('text')
     a.w(0x4F22)                # sts.l pr,@-r15
@@ -116,13 +115,21 @@ def patch(m):
     a.w(0x220E)            # mulu.w r0,r2
     a.w(0x001A)            # sts macl,r0   (idx*6)
     a.w(0x013D)            # mov.w @(r0,r3),r1
-    a.w(0x611D)            # extu.w r1,r1
     a.w(0x2118)            # tst r1,r1
-    a.j(8, 0x8900, 'none') # bt none
+    a.j(8, 0x8D00, 'out')  # bt/s out
+    a.w(0x6013)            # mov r1,r0  (delay slot; 0 when no voice)
+    # stop the current voice only if one is actually playing (flag set and the
+    # pending id already consumed by the per-frame starter); otherwise just
+    # replace the pending id (stopping then would free a stale buffer -> crash)
+    a.lit(2, k53920); a.w(0x6022)   # mov.l @r2,r0
+    a.w(0x2008); a.j(8, 0x8900, 'set')   # tst r0,r0 ; bt set
+    a.lit(2, k49dcc); a.w(0x6021)   # mov.w @r2,r0
+    a.w(0x2008); a.j(8, 0x8B00, 'set')   # tst r0,r0 ; bf set
     a.w(0x2F16)            # mov.l r1,@-r15
     a.lit(0, STOP)
     a.w(0x400B); a.w(0x0009)   # jsr @r0 (stop current voice)
     a.w(0x61F6)            # mov.l @r15+,r1
+    a.L('set')
     a.lit(2, k53920); a.w(0xE001); a.w(0x2202)   # flag=1
     a.lit(2, k49dcc); a.w(0x2211)                # mov.w r1,@r2
     a.lit(2, k48a4c); a.w(0x2211)
@@ -130,12 +137,15 @@ def patch(m):
     a.L('out')
     a.lit(2, k490bc); a.w(0xE300); a.w(0x2232)   # @490bc = 0
     a.w(0x4F26); a.w(0x000B); a.w(0x0009)
-    a.L('none'); a.j(12, 0xA000, 'out'); a.w(0xE000)   # bra out ; mov #0,r0
     code = a.build()
     assert A0 + len(code) <= A1, hex(A0 + len(code))
     m[A0 - BASE:A0 - BASE + len(code)] = code
     m[A0 - BASE + len(code):A1 - BASE] = bytes(A1 - A0 - len(code))
-    m[TEXT_LIT - BASE:TEXT_LIT - BASE + 4] = struct.pack('>I', a.lab['text'])
+    # every place that starts a NEW message in text mode goes through text_entry
+    # (0x0602d2c4 is a page-break continuation of the same message: left alone)
+    for lit in (TEXT_LIT, 0x0602d248, 0x0602d37c, 0x0602d400):
+        assert u32(m, lit) == TEXT, hex(lit)
+        m[lit - BASE:lit - BASE + 4] = struct.pack('>I', a.lab['text'])
     return True
 
 if __name__ == '__main__':

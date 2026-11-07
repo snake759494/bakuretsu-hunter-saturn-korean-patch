@@ -1,11 +1,11 @@
 {
- "version": "v1.1",
+ "version": "v1.2",
  "date": "2026-11-07",
  "game": "Bakuretsu Hunter (Japan) / T-22402G V1.002 / Sega Saturn (CD, BIN/CUE 2트랙: 데이터 MODE1/2352 + 음악)",
- "asset": "BakuretsuHunter_SS_KO_v1.1.xdelta",
+ "asset": "BakuretsuHunter_SS_KO_v1.2.xdelta",
  "asset_target": "Track 1 BIN only (Track 2 unchanged)",
- "asset_size": 708267,
- "asset_sha256": "376b57b13b961590382543ccb72715eca6307c34ba757aa94bb6b04048a70196",
+ "asset_size": 710270,
+ "asset_sha256": "8243820a1668dbd6396aeeb6ad1c44f55f3fcc70167190835b151d5cd42dd7b6",
  "xdelta_options": "xdelta3 -e -0 -S none -A (no compression, no secondary compression, no application header)",
  "source_bin_size": 386640576,
  "source_bin_md5": "2ae2063dc74a2c4451d555820f940c60",
@@ -14,7 +14,7 @@
  "track2_bin_size": 1764000,
  "track2_bin_md5": "e9b72983c72cbeb7aa0d58bfacc10e1d",
  "output_bin_size": 386640576,
- "output_bin_md5": "422845e72cc746a5a65bab531fc0ef95",
- "output_bin_sha1": "cf278cce078eced4e0822999867f66318e210e6e",
- "output_bin_sha256": "22e3e7618af996fda4d5ccf1e50223dbbc9d610481f81810d38b6b56f7e493c1"
+ "output_bin_md5": "b03be8698bca17d98b1a3e1054140764",
+ "output_bin_sha1": "6320713d305823c2fb7b65a19e74265a4402d9c2",
+ "output_bin_sha256": "077e695d0ae9d895e35d38058aa912a7b275362679026af86f5d25b1f38967e7"
 }

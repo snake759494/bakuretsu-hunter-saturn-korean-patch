@@ -1,10 +1,10 @@
 # 폭렬헌터 세가 새턴 한글패치
 
-세가 새턴 일본판 **爆れつハンター (T-22402G)**용 비공식 한국어 패치입니다. **1~6장 44장면의 대사·나레이션·선택지 1,621개 전체**를 한국어로 바꿨습니다. **대화창 이름표, 타이틀·옵션·파일 메뉴 버튼, 세이브 파일 판, 세이브/로드 화면, 슬롯 배틀 승패 글자** 같은 그림 글자도 한글로 다시 그렸습니다. 현재 배포판은 **v1.1 (2026-11-07)**입니다.
+세가 새턴 일본판 **爆れつハンター (T-22402G)**용 비공식 한국어 패치입니다. **1~6장 44장면의 대사·나레이션·선택지 1,621개 전체**를 한국어로 바꿨습니다. **대화창 이름표, 타이틀·옵션·파일 메뉴 버튼, 세이브 파일 판, 세이브/로드 화면, 슬롯 배틀 승패 글자** 같은 그림 글자도 한글로 다시 그렸습니다. 현재 배포판은 **v1.2 (2026-11-07)**입니다.
 
 [패치 다운로드](https://github.com/snake759494/bakuretsu-hunter-saturn-korean-patch/releases/latest) · [기술 설명](docs/TECHNICAL.md) · [재빌드](docs/BUILD.md) · [변경 기록](CHANGELOG.md) · [권리 안내](RIGHTS.md)
 
-릴리즈 첨부 파일은 한글패치 **BakuretsuHunter_SS_KO_v1.1.xdelta**뿐입니다. 저장소에는 제작 소스와 한국어 번역만 공개합니다. 원본·완성 디스크 이미지, 추출한 게임 파일, 일본어 원문, 글꼴 파일, 외부 실행 파일은 포함하지 않습니다. GitHub가 자동으로 만드는 Source code ZIP/TAR는 저장소 소스를 압축한 것이며 게임 파일이 아닙니다.
+릴리즈 첨부 파일은 한글패치 **BakuretsuHunter_SS_KO_v1.2.xdelta**뿐입니다. 저장소에는 제작 소스와 한국어 번역만 공개합니다. 원본·완성 디스크 이미지, 추출한 게임 파일, 일본어 원문, 글꼴 파일, 외부 실행 파일은 포함하지 않습니다. GitHub가 자동으로 만드는 Source code ZIP/TAR는 저장소 소스를 압축한 것이며 게임 파일이 아닙니다.
 
 ## 게임 소개 및 대상 버전
 
@@ -23,11 +23,11 @@
 | 원본 트랙 1 BIN SHA-1 | `770e7981bd541ce76b785552bcf3e001fe8bc8b0` |
 | 원본 트랙 1 BIN SHA-256 | `5e5e130cd7b126d82615d2242cb07ea38a10a344f20e7ccff6ec9adc3d34be07` |
 | 원본 트랙 2 BIN MD5 (변경 없음) | `e9b72983c72cbeb7aa0d58bfacc10e1d` |
-| xdelta 파일 크기 | 708,267 바이트 |
-| xdelta SHA-256 | `376b57b13b961590382543ccb72715eca6307c34ba757aa94bb6b04048a70196` |
+| xdelta 파일 크기 | 710,270 바이트 |
+| xdelta SHA-256 | `8243820a1668dbd6396aeeb6ad1c44f55f3fcc70167190835b151d5cd42dd7b6` |
 | 적용 결과 트랙 1 BIN 크기 | 386,640,576 바이트 (원본과 같음) |
-| 적용 결과 트랙 1 BIN SHA-1 | `cf278cce078eced4e0822999867f66318e210e6e` |
-| 적용 결과 트랙 1 BIN SHA-256 | `22e3e7618af996fda4d5ccf1e50223dbbc9d610481f81810d38b6b56f7e493c1` |
+| 적용 결과 트랙 1 BIN SHA-1 | `6320713d305823c2fb7b65a19e74265a4402d9c2` |
+| 적용 결과 트랙 1 BIN SHA-256 | `077e695d0ae9d895e35d38058aa912a7b275362679026af86f5d25b1f38967e7` |
 
 원본 게임 파일은 사용자가 직접 준비해야 합니다.
 
@@ -43,7 +43,7 @@ Get-FileHash -Algorithm MD5 -LiteralPath '.\Bakuretsu Hunter (Japan) (Disc 1) (T
 
 ### xdelta UI 사용
 
-1. 릴리즈에서 `BakuretsuHunter_SS_KO_v1.1.xdelta`를 받습니다.
+1. 릴리즈에서 `BakuretsuHunter_SS_KO_v1.2.xdelta`를 받습니다.
 2. xdelta3 패치를 지원하는 도구에서 **Apply Patch** 기능을 엽니다.
 3. **Patch**에는 xdelta 파일을, **Source File**에는 해시가 일치하는 원본 **트랙 1** `.bin`을 선택합니다.
 4. **Output File**에는 새 파일 이름을 지정합니다(예: `Bakuretsu Hunter (Korean) (Track 1).bin`).
@@ -64,13 +64,13 @@ xdelta는 호환성을 위해 압축·2차 압축·파일 경로 헤더 없이 �
 ### 명령줄 사용
 
 ```powershell
-.\xdelta3.exe -d -s '.\Bakuretsu Hunter (Japan) (Disc 1) (Track 1).bin' '.\BakuretsuHunter_SS_KO_v1.1.xdelta' '.\Bakuretsu Hunter (Korean) (Track 1).bin'
+.\xdelta3.exe -d -s '.\Bakuretsu Hunter (Japan) (Disc 1) (Track 1).bin' '.\BakuretsuHunter_SS_KO_v1.2.xdelta' '.\Bakuretsu Hunter (Korean) (Track 1).bin'
 ```
 
 해시를 자동으로 검사하고 CUE까지 만들어 주는 도구도 있습니다(CUE는 원본 트랙 2를 그대로 가리킵니다). Python 3과 xdelta3가 필요하며, 같은 이름의 출력 파일이 이미 있으면 덮어쓰지 않습니다.
 
 ```powershell
-python tools/apply_release.py --xdelta '.\xdelta3.exe' --source '.\Bakuretsu Hunter (Japan) (Disc 1) (Track 1).bin' --patch '.\BakuretsuHunter_SS_KO_v1.1.xdelta' --output '.\Bakuretsu Hunter (Korean) (Track 1).bin'
+python tools/apply_release.py --xdelta '.\xdelta3.exe' --source '.\Bakuretsu Hunter (Japan) (Disc 1) (Track 1).bin' --patch '.\BakuretsuHunter_SS_KO_v1.2.xdelta' --output '.\Bakuretsu Hunter (Korean) (Track 1).bin'
 ```
 
 ### 실행
