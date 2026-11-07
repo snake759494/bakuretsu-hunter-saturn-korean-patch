@@ -37,7 +37,26 @@ def wood(t,off,w,h,s,size,x0,x1,y0,y1,TX=(15,14,11)):
                     xx=x+k
                     if 1<=xx<w-1 and not T[y,xx]: N[y,x]=P[y,xx];break
     m=mask(s,size,w,h);F=place(m,w,h,x0,x1,y0,y1);N[F]=15;put(t,off,N)
+def wood2(t,off,w,h,s,size,x0,x1,y0,y1,TX=(15,14,13,11)):
+    P=get(t,off,w,h);T=np.isin(P,TX);T[:, :x0]=False;T[:,x1:]=False;T[:y0]=False;T[y1:]=False
+    N=P.copy()
+    for y in range(h):
+        for x in range(w):
+            if T[y,x]:
+                for k in [d*j for j in (23,37,51,11,7,61,3,90,120,150) for d in (1,-1)]:
+                    xx=x+k
+                    if x0<=xx<x1 and not T[y,xx]: N[y,x]=P[y,xx];break
+    m=mask(s,size,w,h)
+    if m.shape[1]>x1-x0-4: m=np.array(Image.fromarray(m.astype(np.uint8)*255).resize((x1-x0-4,m.shape[0]),Image.LANCZOS))>100
+    F=place(m,w,h,x0,x1,y0,y1);O=dil(F)&~F;N[O&~np.isin(P,(12,13))]=N[O&~np.isin(P,(12,13))]
+    N[F]=15;put(t,off,N)
 def build(t):
+    for off,w,h,txt,sz in [(0xfc60,208,24,'슬롯 배틀 할래 할래',17),(0x10640,208,24,'도플 놀이 할래 할래',17),(0x11020,208,24,'무비 볼래 볼래',17),
+                           (0x123e0,256,32,'슬롯 배틀! 누구랑 할래?',20),(0x146e0,256,32,'도플 놀이! 누구로 할래?',20),(0x162c0,256,32,'무비 볼래 볼래',22),
+                           ]:
+        wood2(t,off,w,h,txt,sz,2,w-2,3,h-2)
+    wood2(t,0xec40,256,32,'당신만의 스페셜 모드!',20,18,238,3,30)
+    wood2(t,0x172e0,272,80,'재생 위치',13,70,140,10,23)
     import ksub
     L=np.frombuffer(bytes(t[0x200:0x200+232*72]),np.uint8).reshape(72,232).copy()
     ksub.overlay(L,'폭렬헌터',232,66,255,52,anchor='br');t[0x200:0x200+232*72]=L.tobytes()
